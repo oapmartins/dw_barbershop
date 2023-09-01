@@ -1,3 +1,4 @@
+import 'package:dw_barbershop_app/src/features/splash/auth/login/login_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -39,14 +40,29 @@ class _SplashPageState extends State<SplashPage> {
         ),
         child: Center(
           child: AnimatedOpacity(
-            duration: const Duration(seconds: 3),
+            duration: const Duration(seconds: 1),
             curve: Curves.ease,
             opacity: _animationOpacityLogo,
+            onEnd: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                  PageRouteBuilder(
+                      transitionsBuilder: (_, animation, __, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                      settings: const RouteSettings(name: 'auth/login'),
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const LoginPage();
+                      }),
+                  (route) => false);
+            },
             child: AnimatedContainer(
               width: _logoAnimationWidh,
               height: _logoAnimationheight,
               curve: Curves.linearToEaseOut,
-              duration: const Duration(seconds: 3),
+              duration: const Duration(seconds: 1),
               child: Image.asset(
                 'assets/images/imgLogo.png',
                 fit: BoxFit.cover,
